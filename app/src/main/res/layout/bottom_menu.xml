@@ -1,0 +1,159 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_gravity="bottom|end"
+    android:orientation="horizontal"
+    android:weightSum="5">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom|end"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/llBottomMemories"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:weightSum="2">
+
+            <ImageView
+                android:id="@+id/imgMemories"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.4"
+                android:padding="5dp"
+                android:duplicateParentState="true"
+                android:src="@drawable/f_book_two" />
+
+            <TextView
+                android:id="@+id/txtMemories"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:text="Memories"
+                android:textColor="@color/colorDarkGreen"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llBottomNotification"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:weightSum="2">
+
+            <ImageView
+                android:id="@+id/imgNotification"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:duplicateParentState="true"
+                android:layout_weight="1.4"
+                android:padding="5dp"
+                android:src="@drawable/f_notification_one" />
+
+            <TextView
+                android:id="@+id/txtNotification"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:duplicateParentState="true"
+                android:layout_weight="0.6"
+                android:textColor="@color/album_title"
+                android:gravity="center"
+                android:text="Notification"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBottomCenter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imgCenter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:duplicateParentState="true"
+                android:background="@drawable/f_center"
+                android:padding="15dp"
+                android:src="@drawable/f_chat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBottomNews"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:weightSum="2">
+
+            <ImageView
+                android:id="@+id/imgNews"
+                android:layout_width="match_parent"
+                android:duplicateParentState="true"
+                android:layout_height="0dp"
+                android:layout_weight="1.4"
+                android:padding="5dp"
+                android:src="@drawable/f_news_one" />
+
+            <TextView
+                android:id="@+id/txtNews"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:textColor="@color/album_title"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:text="News"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBottomStore"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imgStore"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.4"
+                android:duplicateParentState="true"
+                android:padding="5dp"
+                android:src="@drawable/f_store_one" />
+
+            <TextView
+                android:id="@+id/txtStore"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textColor="@color/album_title"
+                android:duplicateParentState="true"
+                android:layout_weight="0.6"
+                android:gravity="center"
+                android:text="Store"
+                android:textSize="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

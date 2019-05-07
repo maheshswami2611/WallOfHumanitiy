@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_memories"
+        android:icon="@drawable/f_book_one"
+        android:title="@string/memories" />
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/f_notification_one"
+        android:title="@string/notification" />
+
+    <item
+        android:id="@+id/action_center"
+        android:icon="@drawable/f_center"
+        android:title="@string/center" />
+
+<item
+        android:id="@+id/action_news"
+        android:icon="@drawable/f_news_one"
+        android:title="@string/news" />
+<item
+        android:id="@+id/action_store"
+        android:icon="@drawable/f_store_one"
+        android:title="@string/store" />
+
+</menu>
