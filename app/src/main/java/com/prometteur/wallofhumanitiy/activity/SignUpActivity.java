@@ -33,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     CommonMethods commonMethods;
 Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
