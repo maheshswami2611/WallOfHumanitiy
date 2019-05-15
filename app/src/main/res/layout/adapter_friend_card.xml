@@ -45,9 +45,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|start|bottom"
-                        android:text="Name Of Suer"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/album_title"
+                        android:textColor="@color/colorBlack"
                         android:textSize="@dimen/album_title"
                         android:textStyle="bold" />
 
@@ -59,16 +58,16 @@
                         android:text="SubName"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/album_title"
-                        android:textSize="@dimen/album_title" />
+                        android:textSize="@dimen/album_sub_title" />
 
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/imgSelectFriend"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:padding="10dp"
-                    android:src="@drawable/checked_green" />
+                    android:padding="10dp" />
 
             </LinearLayout>
 

@@ -18,6 +18,9 @@ public class StatusResultResponce {
     @SerializedName("msg")
     @Expose
     private String msg;
+  @SerializedName("message")
+    @Expose
+    private String message;
 
     public String getStatus() {
         return status;
@@ -25,6 +28,15 @@ public class StatusResultResponce {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getResult() {

@@ -146,6 +146,7 @@
                     android:weightSum="2">
 
                     <ImageView
+                        android:id="@+id/imgSlideLeft"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -155,6 +156,7 @@
                         android:src="@mipmap/faint_back" />
 
                     <ImageView
+                        android:id="@+id/imgSlideRight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"

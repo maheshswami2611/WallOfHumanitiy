@@ -11,9 +11,10 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.prometteur.wallofhumanitiy.Singleton.SingletonMemories;
+//import com.prometteur.wallofhumanitiy.Singleton.MemoryListResp;
 import com.prometteur.wallofhumanitiy.adapters.MemoriesAdapter;
 import com.prometteur.wallofhumanitiy.R;
+import com.prometteur.wallofhumanitiy.other.MemoryListResp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ActivityMemories extends AppCompatActivity {
     ImageView imgBack;
     private RecyclerView recyclerView;
     private MemoriesAdapter adapter;
-    private List<SingletonMemories> singletonMemoriesList;
+    private List<MemoryListResp.Result> memoryListRespList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,10 @@ public class ActivityMemories extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        singletonMemoriesList = new ArrayList<>();
-        adapter = new MemoriesAdapter(this, singletonMemoriesList, new MemoriesAdapter.OnItemClickListener() {
+        memoryListRespList = new ArrayList<>();
+        adapter = new MemoriesAdapter(this, memoryListRespList, new MemoriesAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(SingletonMemories item) {
+            public void onItemClick(MemoryListResp.Result item) {
 
             }
         });
@@ -54,7 +55,7 @@ public class ActivityMemories extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
+        //prepareAlbums();
 /*
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
@@ -63,6 +64,7 @@ public class ActivityMemories extends AppCompatActivity {
         }*/
     }
 
+/*
 
     private void prepareAlbums() {
         int[] covers = new int[]{
@@ -71,22 +73,23 @@ public class ActivityMemories extends AppCompatActivity {
                 R.drawable.album5,
                 R.drawable.album6};
 
-        SingletonMemories a = new SingletonMemories("True Romance", "15", "1", covers[0]);
-        singletonMemoriesList.add(a);
+        MemoryListResp a = new MemoryListResp("True Romance", "15", "1", covers[0]);
+        memoryListRespList.add(a);
 
-        a = new SingletonMemories("Xscpae", "55", "30", covers[1]);
-        singletonMemoriesList.add(a);
+        a = new MemoryListResp("Xscpae", "55", "30", covers[1]);
+        memoryListRespList.add(a);
 
-        a = new SingletonMemories("Maroon 5", "23", "100", covers[2]);
-        singletonMemoriesList.add(a);
+        a = new MemoryListResp("Maroon 5", "23", "100", covers[2]);
+        memoryListRespList.add(a);
 
 
-        a = new SingletonMemories("", "", "", covers[2]);
-        singletonMemoriesList.add(a);
+        a = new MemoryListResp("", "", "", covers[2]);
+        memoryListRespList.add(a);
 
 
         adapter.notifyDataSetChanged();
     }
+*/
 
     /**
      * RecyclerView item decoration - give equal margin around grid item

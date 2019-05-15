@@ -25,20 +25,24 @@ import com.bumptech.glide.request.RequestOptions;
 import com.prometteur.wallofhumanitiy.R;
 import com.prometteur.wallofhumanitiy.activity.SelectShareFriendsActivity;
 import com.prometteur.wallofhumanitiy.Singleton.SingletonMemories;
+import com.prometteur.wallofhumanitiy.other.MemoryListResp;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Ravi Tamada on 18/05/16.
+/*Created by Mahesh Swami on 09/05/19.
  */
 public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<SingletonMemories> singletonMemoriesList;
+    private List<MemoryListResp.Result> memoryListRespList;
 
     public interface OnItemClickListener {
-        void onItemClick(SingletonMemories item);
+        void onItemClick(MemoryListResp.Result item);
     }
+
+    int i = 0;
+
     private final OnItemClickListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,6 +51,7 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
         CardView card_view_last, card_view;
         ImageView imgExpandMemories;
         LinearLayout llShareMemory, llMemoryComments;
+        ImageView imgSlideLeft, imgSlideRight;
 
         public MyViewHolder(View view) {
             super(view);
@@ -59,13 +64,15 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
             imgExpandMemories = view.findViewById(R.id.imgExpandMemories);
             llShareMemory = view.findViewById(R.id.llShareMemory);
             llMemoryComments = view.findViewById(R.id.llMemoryComments);
+            imgSlideLeft = view.findViewById(R.id.imgSlideLeft);
+            imgSlideRight = view.findViewById(R.id.imgSlideRight);
         }
     }
 
 
-    public MemoriesAdapter(Context mContext, List<SingletonMemories> singletonMemoriesList, OnItemClickListener listener) {
+    public MemoriesAdapter(Context mContext, List<MemoryListResp.Result> memoryListRespList, OnItemClickListener listener) {
         this.mContext = mContext;
-        this.singletonMemoriesList = singletonMemoriesList;
+        this.memoryListRespList = memoryListRespList;
         this.listener = listener;
     }
 
@@ -78,11 +85,17 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final SingletonMemories singletonMemories = singletonMemoriesList.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final MemoryListResp.Result memoryListResp = memoryListRespList.get(position);
+
+        final List<String> memoryList = new ArrayList<>();
+
+        memoryList.add(memoryListResp.getMemoryThumbOne());
+        memoryList.add(memoryListResp.getMemoryThumbTwo());
+        memoryList.add(memoryListResp.getMemoryThumbThree());
 
 
-        if (position + 1 == singletonMemoriesList.size()) {
+        if (position + 1 == memoryListRespList.size()) {
             holder.card_view_last.setVisibility(View.VISIBLE);
             holder.card_view.setVisibility(View.GONE);
         } else {
@@ -91,17 +104,20 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
         }
 
 
-        holder.memoTitle.setText(singletonMemories.getMemoTitle());
-        holder.memoNumOfComment.setText(singletonMemories.getMemoNumOfComment());
-        holder.memoNumOfShare.setText(singletonMemories.getMemoNumOfShare());
+        holder.memoTitle.setText(memoryListResp.getMemoryTitle());
+        holder.memoNumOfComment.setText("15");
+        holder.memoNumOfShare.setText("50");
 
-        // loading singletonMemories cover using Glide library
+        // loading memoryListResp cover using Glide library
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+        final RequestOptions finalRequestOptions = requestOptions;
+        final RequestOptions finalRequestOptions1 = requestOptions;
 
-        Glide.with(mContext).load(singletonMemories.getMemoThumbnail())
+        Glide.with(mContext).load(memoryListResp.getMemoryThumbOne())
                 .apply(requestOptions)
                 .into(holder.memoThumbnail);
+
 
         holder.imgExpandMemories.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,16 +125,54 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
                 final Dialog openDialog = new Dialog(mContext);
                 openDialog.setContentView(R.layout.custom_memory_dialog);
                 openDialog.setTitle("");
-                ImageView memoDialogThumbnail = openDialog.findViewById(R.id.memoThumbnail);
-                // loading singletonMemories cover using Glide library
+                final ImageView memoDialogThumbnail = openDialog.findViewById(R.id.memoThumbnail);
+                // loading memoryListResp cover using Glide library
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+                i = 0;
 
-
-                Glide.with(mContext).load(singletonMemories.getMemoThumbnail())
+                Glide.with(mContext).load(memoryListResp.getMemoryThumbOne())
                         .apply(requestOptions)
                         .into(memoDialogThumbnail);
                 ImageView dialogCloseButton = openDialog.findViewById(R.id.dialogCloseButton);
+                ImageView imgSlideLeft = openDialog.findViewById(R.id.imgSlideLeft);
+                ImageView imgSlideRight = openDialog.findViewById(R.id.imgSlideRight);
+
+                TextView dlgMemoTitle, dlgMemoTime, dlgMemoDesc, dlgMemoCompliment, dlgMemoComments;
+                dlgMemoTitle = openDialog.findViewById(R.id.dlgMemoTitle);
+                dlgMemoTime = openDialog.findViewById(R.id.dlgMemoTime);
+                dlgMemoDesc = openDialog.findViewById(R.id.dlgMemoDesc);
+                dlgMemoCompliment = openDialog.findViewById(R.id.dlgMemoCompliment);
+                dlgMemoComments = openDialog.findViewById(R.id.dlgMemoComments);
+
+                dlgMemoTitle.setText(memoryListResp.getMemoryTitle());
+                dlgMemoTime.setText(memoryListResp.getMemoryCreateDate());
+                dlgMemoDesc.setText(memoryListResp.getMemoryDesc());
+
+                imgSlideLeft.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (i > 0) {
+                            i--;
+                            if (null != memoryList.get(i) && !memoryList.get(i).equalsIgnoreCase(""))
+                                Glide.with(mContext).load(memoryList.get(i))
+                                        .apply(finalRequestOptions1)
+                                        .into(memoDialogThumbnail);
+                        }
+                    }
+                });
+                imgSlideRight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (i < memoryList.size() - 1) {
+                            i++;
+                            if (null != memoryList.get(i) && !memoryList.get(i).equalsIgnoreCase(""))
+                                Glide.with(mContext).load(memoryList.get(i))
+                                        .apply(finalRequestOptions1)
+                                        .into(memoDialogThumbnail);
+                        }
+                    }
+                });
                 dialogCloseButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,9 +214,37 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
         holder.card_view_last.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(singletonMemories);
+                listener.onItemClick(memoryListResp);
 
             }
+        });
+
+
+        holder.imgSlideLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (i > 0) {
+                    i--;
+                    if (null != memoryList.get(i) && !memoryList.get(i).equalsIgnoreCase(""))
+                        Glide.with(mContext).load(memoryList.get(i))
+                                .apply(finalRequestOptions1)
+                                .into(holder.memoThumbnail);
+                }
+            }
+        });
+        final RequestOptions finalRequestOptions2 = requestOptions;
+        holder.imgSlideRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (i < memoryList.size() - 1) {
+                    i++;
+                    if (null != memoryList.get(i) && !memoryList.get(i).equalsIgnoreCase(""))
+                        Glide.with(mContext).load(memoryList.get(i))
+                                .apply(finalRequestOptions1)
+                                .into(holder.memoThumbnail);
+                }
+            }
+
         });
 
 
@@ -200,6 +282,6 @@ public class MemoriesAdapter extends RecyclerView.Adapter<MemoriesAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return singletonMemoriesList.size();
+        return memoryListRespList.size();
     }
 }

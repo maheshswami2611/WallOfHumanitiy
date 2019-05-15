@@ -17,7 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.prometteur.wallofhumanitiy.R;
-import com.prometteur.wallofhumanitiy.Singleton.SingletonFriend;
+import com.prometteur.wallofhumanitiy.activity.SelectShareFriendsActivity;
+import com.prometteur.wallofhumanitiy.other.FriendListResp;
 
 import java.util.List;
 
@@ -27,23 +28,24 @@ import java.util.List;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<SingletonFriend> singletonFriendList;
+    private List<FriendListResp.Message> singletonFriendList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView friendName, friendSubName;
-        public ImageView friendThumbnail;
+        public ImageView friendThumbnail,imgSelectFriend;
 
         public MyViewHolder(View view) {
             super(view);
             friendName = view.findViewById(R.id.friendName);
             friendSubName = view.findViewById(R.id.friendSubName);
             friendThumbnail = view.findViewById(R.id.friendThumbnail);
+            imgSelectFriend = view.findViewById(R.id.imgSelectFriend);
         }
     }
 
 
-    public FriendsAdapter(Context mContext, List<SingletonFriend> singletonFriendList) {
+    public FriendsAdapter(Context mContext, List<FriendListResp.Message> singletonFriendList) {
         this.mContext = mContext;
         this.singletonFriendList = singletonFriendList;
     }
@@ -57,18 +59,40 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final SingletonFriend singletonFriend = singletonFriendList.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final FriendListResp.Message singletonFriend = singletonFriendList.get(position);
 
 
+        if(singletonFriend.isSelected()){
+            holder.imgSelectFriend.setImageDrawable(mContext.getResources().getDrawable(R.drawable.checked_green));
+        }else {
+            holder.imgSelectFriend.setImageDrawable(null);
+        }
 
-        holder.friendName.setText(singletonFriend.getFriendName());
-        holder.friendSubName.setText(singletonFriend.getFriendSubName());
+        holder.imgSelectFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(singletonFriendList.get(position).isSelected()){
+                    singletonFriendList.get(position).setSelected(false);
+                    ((SelectShareFriendsActivity)mContext).friendList.get(position).setSelected(false);
+
+                }else {
+                    singletonFriendList.get(position).setSelected(true);
+                    ((SelectShareFriendsActivity)mContext).friendList.get(position).setSelected(true);
+
+                }
+                notifyDataSetChanged();
+            }
+        });
+
+
+        holder.friendName.setText(singletonFriend.getUserFname() +" "+singletonFriend.getUserLname());
+        //holder.friendSubName.setText(singletonFriend.getUserFname());
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
 
-        Glide.with(mContext).load(singletonFriend.getFriendThumbnail())
+        Glide.with(mContext).load(singletonFriend.getUserProfileImg())
                 .apply(requestOptions)
                 .into(holder.friendThumbnail);
 

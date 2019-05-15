@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.prometteur.wallofhumanitiy.R;
 import com.prometteur.wallofhumanitiy.Singleton.SingletonStore;
+import com.prometteur.wallofhumanitiy.other.StoreResponce;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 public class StoreQPurchaseAdapter extends RecyclerView.Adapter<StoreQPurchaseAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<SingletonStore> singletonStoreList;
+    private List<StoreResponce.TotalPlansMonth> singletonStoreList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +39,7 @@ public class StoreQPurchaseAdapter extends RecyclerView.Adapter<StoreQPurchaseAd
     }
 
 
-    public StoreQPurchaseAdapter(Context mContext, List<SingletonStore> singletonStoreList) {
+    public StoreQPurchaseAdapter(Context mContext, List<StoreResponce.TotalPlansMonth> singletonStoreList) {
         this.mContext = mContext;
         this.singletonStoreList = singletonStoreList;
     }
@@ -53,11 +54,11 @@ public class StoreQPurchaseAdapter extends RecyclerView.Adapter<StoreQPurchaseAd
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final SingletonStore singletonStore = singletonStoreList.get(position);
+        final StoreResponce.TotalPlansMonth singletonStore = singletonStoreList.get(position);
 
 
 
-        holder.storeTitle.setText(singletonStore.getStoreTitle());
+        holder.storeTitle.setText(singletonStore.getPlansMonthValue() +" GB = "+singletonStore.getPlansMonthRupee()+" $");
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));

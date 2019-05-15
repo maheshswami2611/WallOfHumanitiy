@@ -19,6 +19,7 @@ import com.prometteur.wallofhumanitiy.activity.MainActivity;
 import com.prometteur.wallofhumanitiy.R;
 import com.prometteur.wallofhumanitiy.Singleton.SingletonStore;
 import com.prometteur.wallofhumanitiy.fragments.FragmentStorePieChart;
+import com.prometteur.wallofhumanitiy.other.StoreResponce;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ import java.util.List;
 public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<SingletonStore> singletonStoreList;
+    private List<StoreResponce.TotalPlansGb> singletonStoreList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -41,7 +42,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
     }
 
 
-    public StoreAdapter(Context mContext, List<SingletonStore> singletonStoreList) {
+    public StoreAdapter(Context mContext, List<StoreResponce.TotalPlansGb> singletonStoreList) {
         this.mContext = mContext;
         this.singletonStoreList = singletonStoreList;
     }
@@ -56,11 +57,11 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final SingletonStore singletonStore = singletonStoreList.get(position);
+        final StoreResponce.TotalPlansGb singletonStore = singletonStoreList.get(position);
 
 
 
-        holder.storeTitle.setText(singletonStore.getStoreTitle());
+        holder.storeTitle.setText(singletonStore.getPlansGbValue() +" GB = "+singletonStore.getPlansGbRupee()+" $");
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
