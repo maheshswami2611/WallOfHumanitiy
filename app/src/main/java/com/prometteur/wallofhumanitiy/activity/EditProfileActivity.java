@@ -72,8 +72,9 @@ public class EditProfileActivity extends AppCompatActivity {
     int dayOfMonth;
     Calendar calendar;
     String[] genderItems;
-    ArrayList<LoginResponce.Result> loginData;
-Context context;
+    ArrayList<LoginResponce.User> loginData;
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -87,7 +88,7 @@ Context context;
         if (actionBar != null) {
             actionBar.hide();
         }
-        context=this;
+        context = this;
         commonMethods = new CommonMethods();
         edtFirstName = findViewById(R.id.edtFirstName);
         edtLastName = findViewById(R.id.edtLastName);
@@ -203,6 +204,12 @@ Context context;
                 String user_banner_img = loginData.get(0).getUserBannerImg();
                 String user_occupation = edtOccupation.getText().toString().trim();
                 String user_gender = edtGender.getText().toString();
+                if(user_gender.equalsIgnoreCase("Male")){
+                    user_gender="0";
+                }else if(user_gender.equalsIgnoreCase("Female")){
+                    user_gender="1";
+
+                }
                 String user_aboutme = edtAboutMe.getText().toString().trim();
                 String user_location = loginData.get(0).getUserLocation();
                 String user_address = edtAddress.getText().toString();
@@ -218,30 +225,29 @@ Context context;
                 String user_status = loginData.get(0).getUserStatus();
 
 
-
                 if (user_address.length() > 0) {
                     if (user_occupation.length() > 0) {
                         if (user_username.length() > 0) {
                             if (user_fname.length() > 0) {
                                 if (user_lname.length() > 0) {
                                     if (commonMethods.isValidEmail(user_email)) {
-                                            updateProfileApi(
-                                                    user_id ,
-                                                    user_fname ,
-                                                    user_lname ,
-                                                    user_phone ,
-                                                    user_password ,
-                                                    user_dob ,
-                                                    user_profile_img ,
-                                                    user_banner_img ,
-                                                    user_occupation ,
-                                                    user_gender,
-                                                    user_aboutme ,
-                                                    user_location,
-                                                    user_address ,
-                                                    user_username
+                                        updateProfileApi(
+                                                user_id,
+                                                user_fname,
+                                                user_lname,
+                                                user_phone,
+                                                user_password,
+                                                user_dob,
+                                                user_profile_img,
+                                                user_banner_img,
+                                                user_occupation,
+                                                user_gender,
+                                                user_aboutme,
+                                                user_location,
+                                                user_address,
+                                                user_username
 
-                                            );
+                                        );
 
 
                                     } else {
@@ -286,25 +292,34 @@ Context context;
                 LoginResponce resource = response.body();
 
                 if (null != resource && null != resource.getStatus())
-                    if (resource.getStatus() == 1) {
-                        if (null != response.body().getResult()) {
-                            loginData = response.body().getResult();
+                    if (resource.getStatus().equalsIgnoreCase("1")) {
+                        if (null != response.body().getUser()) {
+                            loginData = response.body().getUser();
+
+                            try {
+                                if (null != loginData) {
+                                    edtFirstName.setText(loginData.get(0).getUserFname());
+                                    edtLastName.setText(loginData.get(0).getUserLname());
+                                    edtUserName.setText(loginData.get(0).getUserUsername());
+                                    edtEmail.setText(loginData.get(0).getUserEmail());
+                                    edtPhoneNumber.setText(loginData.get(0).getUserPhone());
+                                    edtDateOfBirth.setText(loginData.get(0).getUserDob());
+                                    edtOccupation.setText(loginData.get(0).getUserOccupation());
+                                    if(loginData.get(0).getUserGender().equalsIgnoreCase("0")){
+                                        edtGender.setText("Male");
+                                    }else if(loginData.get(0).getUserGender().equalsIgnoreCase("1")){
+                                        edtGender.setText("Female");
+
+                                    }
+                                    edtAddress.setText(loginData.get(0).getUserAddress());
+                                    edtAboutMe.setText(loginData.get(0).getUserAboutme());
 
 
-                            if (null != loginData) {
-                                edtFirstName.setText(loginData.get(0).getUserFname());
-                                edtLastName.setText(loginData.get(0).getUserLname());
-                                edtUserName.setText(loginData.get(0).getUserUsername());
-                                edtEmail.setText(loginData.get(0).getUserEmail());
-                                edtPhoneNumber.setText(loginData.get(0).getUserPhone());
-                                edtDateOfBirth.setText(loginData.get(0).getUserDob());
-                                edtOccupation.setText(loginData.get(0).getUserOccupation());
-                                edtGender.setText(loginData.get(0).getUserGender());
-                                edtAddress.setText(loginData.get(0).getUserAddress());
-                                edtAboutMe.setText(loginData.get(0).getUserAboutme());
-
-
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+
                         }
 
                     } else {
@@ -323,36 +338,36 @@ Context context;
 
 
     private void updateProfileApi(
-           String user_id ,
-           String user_fname ,
-           String user_lname ,
-           String user_phone ,
-           String user_password ,
-           String user_dob ,
-           String user_profile_img ,
-           String user_banner_img ,
-           String user_occupation ,
-           String user_gender,
-           String user_aboutme ,
-           String user_location,
-           String user_address ,
-           String user_username
+            String user_id,
+            String user_fname,
+            String user_lname,
+            String user_phone,
+            String user_password,
+            String user_dob,
+            String user_profile_img,
+            String user_banner_img,
+            String user_occupation,
+            String user_gender,
+            String user_aboutme,
+            String user_location,
+            String user_address,
+            String user_username
     ) {
         spotsDialog.show();
         Call<StatusResultResponce> call = apiInterface.updateUser(
-                user_id ,
-                user_fname ,
-                user_lname ,
-                user_phone ,
-                user_password ,
-                user_dob ,
-                user_profile_img ,
-                user_banner_img ,
-                user_occupation ,
+                user_id,
+                user_fname,
+                user_lname,
+                user_phone,
+                user_password,
+                user_dob,
+                user_profile_img,
+                user_banner_img,
+                user_occupation,
                 user_gender,
-                user_aboutme ,
+                user_aboutme,
                 user_location,
-                user_address ,
+                user_address,
                 user_username
 
         );

@@ -1,36 +1,35 @@
 package com.prometteur.wallofhumanitiy.other;
-
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-public class LoginResponce implements Serializable{
 
-    @SerializedName("result")
-    @Expose
-    private ArrayList<Result> result = null;
+public class LoginResponce {
+
     @SerializedName("status")
     @Expose
-    private Integer status;
+    private String status;
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("user")
+    @Expose
+    private ArrayList<User> user = null;
+    @SerializedName("album")
+    @Expose
+    private ArrayList<Object> album = null;
+    @SerializedName("video")
+    @Expose
+    private ArrayList<Object> video = null;
+    @SerializedName("places")
+    @Expose
+    private ArrayList<Object> places = null;
+    @SerializedName("friend_list")
+    @Expose
+    private Object friendList;
 
-    public ArrayList<Result> getResult() {
-        return result;
-    }
-
-    public void setResult(ArrayList<Result> result) {
-        this.result = result;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public String getMessage() {
         return message;
@@ -40,8 +39,57 @@ public class LoginResponce implements Serializable{
         this.message = message;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
-    public class Result implements Serializable {
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public ArrayList<User> getUser() {
+        return user;
+    }
+
+    public void setUser(ArrayList<User> user) {
+        this.user = user;
+    }
+
+    public List<Object> getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(ArrayList<Object> album) {
+        this.album = album;
+    }
+
+    public List<Object> getVideo() {
+        return video;
+    }
+
+    public void setVideo(ArrayList<Object> video) {
+        this.video = video;
+    }
+
+    public List<Object> getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(ArrayList<Object> places) {
+        this.places = places;
+    }
+
+    public Object getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(Object friendList) {
+        this.friendList = friendList;
+    }
+
+
+
+    public class User implements Serializable {
 
         @SerializedName("user_id")
         @Expose
@@ -70,9 +118,15 @@ public class LoginResponce implements Serializable{
         @SerializedName("user_profile_img")
         @Expose
         private String userProfileImg;
+        @SerializedName("user_profile_img_size")
+        @Expose
+        private String userProfileImgSize;
         @SerializedName("user_banner_img")
         @Expose
         private String userBannerImg;
+        @SerializedName("user_banner_img_size")
+        @Expose
+        private String userBannerImgSize;
         @SerializedName("user_occupation")
         @Expose
         private String userOccupation;
@@ -103,6 +157,24 @@ public class LoginResponce implements Serializable{
         @SerializedName("user_forget_code")
         @Expose
         private String userForgetCode;
+        @SerializedName("user_search_engine_setting")
+        @Expose
+        private String userSearchEngineSetting;
+        @SerializedName("user_active_camera_setting")
+        @Expose
+        private String userActiveCameraSetting;
+        @SerializedName("user_notification_setting")
+        @Expose
+        private String userNotificationSetting;
+        @SerializedName("user_video_setting")
+        @Expose
+        private String userVideoSetting;
+        @SerializedName("user_location_setting")
+        @Expose
+        private String userLocationSetting;
+        @SerializedName("user_language_setting")
+        @Expose
+        private String userLanguageSetting;
         @SerializedName("user_create_date")
         @Expose
         private String userCreateDate;
@@ -118,9 +190,6 @@ public class LoginResponce implements Serializable{
         @SerializedName("user_status")
         @Expose
         private String userStatus;
-
-
-
 
         public String getUserId() {
             return userId;
@@ -194,12 +263,28 @@ public class LoginResponce implements Serializable{
             this.userProfileImg = userProfileImg;
         }
 
+        public String getUserProfileImgSize() {
+            return userProfileImgSize;
+        }
+
+        public void setUserProfileImgSize(String userProfileImgSize) {
+            this.userProfileImgSize = userProfileImgSize;
+        }
+
         public String getUserBannerImg() {
             return userBannerImg;
         }
 
         public void setUserBannerImg(String userBannerImg) {
             this.userBannerImg = userBannerImg;
+        }
+
+        public String getUserBannerImgSize() {
+            return userBannerImgSize;
+        }
+
+        public void setUserBannerImgSize(String userBannerImgSize) {
+            this.userBannerImgSize = userBannerImgSize;
         }
 
         public String getUserOccupation() {
@@ -282,6 +367,54 @@ public class LoginResponce implements Serializable{
             this.userForgetCode = userForgetCode;
         }
 
+        public String getUserSearchEngineSetting() {
+            return userSearchEngineSetting;
+        }
+
+        public void setUserSearchEngineSetting(String userSearchEngineSetting) {
+            this.userSearchEngineSetting = userSearchEngineSetting;
+        }
+
+        public String getUserActiveCameraSetting() {
+            return userActiveCameraSetting;
+        }
+
+        public void setUserActiveCameraSetting(String userActiveCameraSetting) {
+            this.userActiveCameraSetting = userActiveCameraSetting;
+        }
+
+        public String getUserNotificationSetting() {
+            return userNotificationSetting;
+        }
+
+        public void setUserNotificationSetting(String userNotificationSetting) {
+            this.userNotificationSetting = userNotificationSetting;
+        }
+
+        public String getUserVideoSetting() {
+            return userVideoSetting;
+        }
+
+        public void setUserVideoSetting(String userVideoSetting) {
+            this.userVideoSetting = userVideoSetting;
+        }
+
+        public String getUserLocationSetting() {
+            return userLocationSetting;
+        }
+
+        public void setUserLocationSetting(String userLocationSetting) {
+            this.userLocationSetting = userLocationSetting;
+        }
+
+        public String getUserLanguageSetting() {
+            return userLanguageSetting;
+        }
+
+        public void setUserLanguageSetting(String userLanguageSetting) {
+            this.userLanguageSetting = userLanguageSetting;
+        }
+
         public String getUserCreateDate() {
             return userCreateDate;
         }
@@ -321,8 +454,6 @@ public class LoginResponce implements Serializable{
         public void setUserStatus(String userStatus) {
             this.userStatus = userStatus;
         }
-
-
     }
 
 }

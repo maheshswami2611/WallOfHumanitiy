@@ -4,12 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -31,10 +31,7 @@ import com.prometteur.wallofhumanitiy.other.ChangePasswordResp;
 import com.prometteur.wallofhumanitiy.other.EmailExistResp;
 import com.prometteur.wallofhumanitiy.other.LoginResponce;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -44,7 +41,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private Button btnLogin, btnLoginTabSignUp, btnLoginTabLogin;
     APIInterface apiInterface;
-    ArrayList<LoginResponce.Result> loginData;
+    ArrayList<LoginResponce.User> loginData;
     SpotsDialog spotsDialog;
     EditText edtUserName;
     TextInputEditText edtPassword;
@@ -201,15 +198,17 @@ public class LoginActivity extends AppCompatActivity {
                 LoginResponce resource = response.body();
 
                 if (null != resource && null != resource.getStatus())
-                    if (resource.getStatus() == 1) {
-                        if(null!=response.body().getResult()){
-                            loginData = response.body().getResult();
+                    if (resource.getStatus() .equalsIgnoreCase("1")) {
+                        if(null!=response.body().getUser()){
+                            loginData = response.body().getUser();
 
 
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("Login","True");
                             editor.putString("UserId",loginData.get(0).getUserId());
+
+                            editor.putString("UserSession",loginData.get(0).getUserSession());
                             editor.apply();
 
                             Toast.makeText(LoginActivity.this, "Successfully logged in...", Toast.LENGTH_SHORT).show();
@@ -222,7 +221,6 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, resource.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
 
             }
 

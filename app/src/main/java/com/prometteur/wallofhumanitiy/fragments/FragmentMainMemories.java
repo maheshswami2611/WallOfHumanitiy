@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -78,7 +80,7 @@ public class FragmentMainMemories extends Fragment {
     ImageView imgBack;
     private RecyclerView recyclerView;
     private MemoriesAdapter adapter;
-    private List<MemoryListResp.Result> singletonMemoriesList;
+    private List<MemoryListResp.Result> singletonMemoriesList=new ArrayList<>();
     MainActivity mainActivity;
     TextView txtSelectedFile;
     final int PERMISSION_REQUEST_CODE = 200;
@@ -102,7 +104,8 @@ public class FragmentMainMemories extends Fragment {
     Bitmap myBitmap;
 
     List<Bitmap> bitmapas = new ArrayList<>();
-
+    String mainuser_id = "";
+    String mainuser_session="";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,10 +121,13 @@ public class FragmentMainMemories extends Fragment {
                 ((MainActivity) getActivity()).pushFragment(new FragmentBottomMemories());
             }
         });
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mainuser_id = preferences.getString("UserId", "");
+
+        mainuser_session = preferences.getString("UserSession", "");
 
 
-
-        getMemoryList("110", "1", "914787215");
+        getMemoryList(mainuser_id, "1", mainuser_session);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
@@ -322,7 +328,7 @@ public class FragmentMainMemories extends Fragment {
     }
 
 
-    private void addNewMemory(final Dialog dialog, String revimg_hotel_id1,
+    private void addNewMemory(final Dialog dialog,
                                String memory_title1,
                                String memory_desc1,
                                String memory_location1
@@ -331,13 +337,13 @@ public class FragmentMainMemories extends Fragment {
 
 
 
-        RequestBody dumm = RequestBody.create(MediaType.parse("text/plain"), "110");
+        RequestBody dumm = RequestBody.create(MediaType.parse("text/plain"), mainuser_id);
         RequestBody memory_title = RequestBody.create(MediaType.parse("text/plain"), memory_title1);
         RequestBody memory_desc = RequestBody.create(MediaType.parse("text/plain"), memory_desc1);
         RequestBody memory_location = RequestBody.create(MediaType.parse("text/plain"), memory_location1);
         RequestBody memory_lat = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(latitude));
         RequestBody memory_lng = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(longitude));
-        RequestBody user_session = RequestBody.create(MediaType.parse("text/plain"), "914787215");
+        RequestBody user_session = RequestBody.create(MediaType.parse("text/plain"), mainuser_session);
         RequestBody memType = RequestBody.create(MediaType.parse("text/plain"), "1");
 
 
@@ -733,7 +739,7 @@ public class FragmentMainMemories extends Fragment {
                                 btnAddPhotoVideo.setVisibility(View.GONE);
 
 
-                                btnSaveMemory.setOnClickListener(new View.OnClickListener() {
+                           /*     btnSaveMemory.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         if (!edtMemoryLocation.getText().toString().equalsIgnoreCase("")) {
@@ -758,8 +764,8 @@ public class FragmentMainMemories extends Fragment {
                                             Toast.makeText(mContext, "Please wait while fetching location", Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });
-                                btnShareMemory.setOnClickListener(new View.OnClickListener() {
+                                });*/
+                                btnSaveMemory.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         if (!edtMemoryLocation.getText().toString().equalsIgnoreCase("")) {
@@ -769,7 +775,7 @@ public class FragmentMainMemories extends Fragment {
 
                                                     if (!edtMemoryDescription.getText().toString().trim().equalsIgnoreCase("")) {
                                                         spotsDialog.show();
-                                                        addNewMemory(openDialog, "8", edtMemoryTitle.getText().toString(), edtMemoryDescription.getText().toString(),edtMemoryLocation.getText().toString());
+                                                        addNewMemory(openDialog, edtMemoryTitle.getText().toString(), edtMemoryDescription.getText().toString(),edtMemoryLocation.getText().toString());
                                                     } else {
                                                         edtMemoryTitle.setError("Enter Memory Description");
                                                     }
@@ -829,8 +835,144 @@ public class FragmentMainMemories extends Fragment {
                         });
                         recyclerView.setAdapter(adapter);
 
-                    } else if (resource.getStatus().toString().equals("2")) {
+                    } else {
                         Toast.makeText(mContext, "" + resource.getMessage(), Toast.LENGTH_SHORT).show();
+                        MemoryListResp.Result res=new MemoryListResp.Result(mContext);
+                        singletonMemoriesList.add(res);
+                        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                        adapter = new MemoriesAdapter(getActivity(), singletonMemoriesList, new MemoriesAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(MemoryListResp.Result item) {
+
+                                final Dialog openDialog = new Dialog(mContext);
+                                openDialog.setContentView(R.layout.custom_add_memory_dialog);
+                                openDialog.setTitle("");
+
+                                ImageView dialogCloseButton = openDialog.findViewById(R.id.dialogCloseButton);
+                                dialogCloseButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // TODO Auto-generated method stub
+                                        openDialog.dismiss();
+                                    }
+                                });
+
+                                final Button btnAddPhotoVideo = openDialog.findViewById(R.id.btnAddPhotoVideo);
+                                final Button btnSaveMemory = openDialog.findViewById(R.id.btnSaveMemory);
+                                final Button btnShareMemory = openDialog.findViewById(R.id.btnShareMemory);
+                                final EditText edtMemoryLocation = openDialog.findViewById(R.id.edtMemoryLocation);
+                                final EditText edtMemoryTitle = openDialog.findViewById(R.id.edtMemoryTitle);
+                                final EditText edtMemoryDescription = openDialog.findViewById(R.id.edtMemoryDescription);
+                                final View viewTextTab = openDialog.findViewById(R.id.viewTextTab);
+                                imageToUpload = openDialog.findViewById(R.id.imgToUpload);
+                                final View viewPhotoAndVideoTab = openDialog.findViewById(R.id.viewPhotoAndVideoTab);
+                                final TextView tabText = openDialog.findViewById(R.id.txtTextTab);
+                                txtSelectedFile = openDialog.findViewById(R.id.txtSelectedFile);
+                                final TextView tabPhotoAndVideo = openDialog.findViewById(R.id.txtPhotoAndVideoTab);
+                                tabText.setTextColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                viewTextTab.setBackgroundColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                btnAddPhotoVideo.setVisibility(View.GONE);
+
+
+                                btnSaveMemory.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!edtMemoryLocation.getText().toString().equalsIgnoreCase("")) {
+                                            if (edtMemoryLocation.getText().toString().trim().length() > 0) {
+
+                                                if (!edtMemoryTitle.getText().toString().trim().equalsIgnoreCase("")) {
+
+                                                    if (!edtMemoryDescription.getText().toString().trim().equalsIgnoreCase("")) {
+                                                        Toast.makeText(mContext, "Save", Toast.LENGTH_SHORT).show();
+
+                                                    } else {
+                                                        edtMemoryTitle.setError("Enter Memory Description");
+                                                    }
+                                                } else {
+                                                    edtMemoryTitle.setError("Enter Memory Title");
+                                                }
+                                            } else {
+                                                Toast.makeText(mContext, "Please wait while fetching location", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        } else {
+                                            Toast.makeText(mContext, "Please wait while fetching location", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                                btnShareMemory.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!edtMemoryLocation.getText().toString().equalsIgnoreCase("")) {
+                                            if (edtMemoryLocation.getText().toString().trim().length() > 0) {
+
+                                                if (!edtMemoryTitle.getText().toString().trim().equalsIgnoreCase("")) {
+
+                                                    if (!edtMemoryDescription.getText().toString().trim().equalsIgnoreCase("")) {
+                                                        spotsDialog.show();
+                                                        addNewMemory(openDialog,  edtMemoryTitle.getText().toString(), edtMemoryDescription.getText().toString(),edtMemoryLocation.getText().toString());
+                                                    } else {
+                                                        edtMemoryTitle.setError("Enter Memory Description");
+                                                    }
+                                                } else {
+                                                    edtMemoryTitle.setError("Enter Memory Title");
+                                                }
+                                            } else {
+                                                Toast.makeText(mContext, "Please wait while fetching location", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        } else {
+                                            Toast.makeText(mContext, "Please wait while fetching location", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+
+                                if (checkPermission()) {
+                                    find_Location(edtMemoryLocation);
+                                } else {
+                                    requestPermission();
+                                }
+
+
+                                tabText.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        tabText.setTextColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                        viewTextTab.setBackgroundColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                        tabPhotoAndVideo.setTextColor(mContext.getResources().getColor(R.color.album_title));
+                                        viewPhotoAndVideoTab.setBackgroundColor(mContext.getResources().getColor(R.color.album_title));
+                                        btnAddPhotoVideo.setVisibility(View.GONE);
+
+                                    }
+                                });
+                                tabPhotoAndVideo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        tabPhotoAndVideo.setTextColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                        viewPhotoAndVideoTab.setBackgroundColor(mContext.getResources().getColor(R.color.colorDarkGreen));
+                                        tabText.setTextColor(mContext.getResources().getColor(R.color.album_title));
+                                        viewTextTab.setBackgroundColor(mContext.getResources().getColor(R.color.album_title));
+                                        btnAddPhotoVideo.setVisibility(View.VISIBLE);
+                                    }
+                                });
+
+                                btnAddPhotoVideo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        selectImage();
+                                    }
+                                });
+                                openDialog.show();
+
+
+                            }
+                        });
+                        recyclerView.setAdapter(adapter);
                     }
                     if (null != spotsDialog && spotsDialog.isShowing()) {
                         spotsDialog.dismiss();

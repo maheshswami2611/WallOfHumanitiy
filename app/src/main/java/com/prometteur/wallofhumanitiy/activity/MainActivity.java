@@ -1,6 +1,5 @@
 package com.prometteur.wallofhumanitiy.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -17,7 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.prometteur.wallofhumanitiy.Interface.APIInterface;
 import com.prometteur.wallofhumanitiy.R;
+import com.prometteur.wallofhumanitiy.Singleton.CountOfRecordsData;
+import com.prometteur.wallofhumanitiy.Singleton.CountOfRecordsDetails;
 import com.prometteur.wallofhumanitiy.Utility.Constant;
 import com.prometteur.wallofhumanitiy.fragments.FragmentBottomCenter;
 import com.prometteur.wallofhumanitiy.fragments.FragmentBottomMemories;
@@ -45,6 +46,7 @@ import com.prometteur.wallofhumanitiy.helper.APIClient;
 import com.prometteur.wallofhumanitiy.other.LoginResponce;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private String[] activityTitles;
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    ArrayList<LoginResponce.Result> loginData;
+    ArrayList<LoginResponce.User> loginData;
+
+    private List<CountOfRecordsDetails> countOfRecordsDetails=new ArrayList<>();
 
     public MainActivity(Context Context) {
 
@@ -89,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String user_id = preferences.getString("UserId", "");
 
-
         getUserInfo(user_id);
 
+        getCountOfAllRecord();
 
         llAlbumPhotos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -216,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
                 LoginResponce resource = response.body();
 
                 if (null != resource && null != resource.getStatus())
-                    if (resource.getStatus() == 1) {
-                        if (null != response.body().getResult()) {
-                            loginData = response.body().getResult();
+                    if (resource.getStatus() .equalsIgnoreCase( "1")) {
+                        if (null != response.body().getUser()) {
+                            loginData = response.body().getUser();
 
 
                             if (null != loginData) {
@@ -371,4 +374,83 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void getCountOfAllRecord()
+    {
+        countOfRecordsDetails = new ArrayList<>();
+        countOfRecordsDetails.clear();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String user_id = preferences.getString("UserId", "");
+        String user_session = preferences.getString("UserSession", "");
+        Log.i("Selected_Params","\t"+user_id+"\t"+user_session);
+
+        Call<CountOfRecordsData> call = apiInterface.getCountOfRecords(user_id, user_session);
+
+        call.enqueue(new Callback<CountOfRecordsData>() {
+            @Override
+            public void onResponse(Call<CountOfRecordsData> call, Response<CountOfRecordsData> response) {
+
+                if(response.isSuccessful())
+                {
+                    if(response.body().getStatus().equals("1")){
+                    countOfRecordsDetails = response.body().getResult();
+                        if(!countOfRecordsDetails.isEmpty())
+                        {
+                            String str1 = countOfRecordsDetails.get(0).getTotalPhotoes();
+                            String str2 = countOfRecordsDetails.get(1).getTotalVideos();
+                            String str3 = countOfRecordsDetails.get(2).getTotalPlacesVisited();
+                            String str4 = countOfRecordsDetails.get(3).getTotalTransmission();
+                            String str5 = countOfRecordsDetails.get(4).getTotalLegacy();
+
+                            TextView photosCount = (TextView)navHeader.findViewById(R.id.photos_count_text);
+                            TextView videoCount = (TextView)navHeader.findViewById(R.id.videos_count_text);
+                            TextView placesVisitedCount = (TextView)navHeader.findViewById(R.id.placesvisited_count_text);
+                            TextView tranmissionCount = (TextView)navHeader.findViewById(R.id.transmission_count_text);
+                            TextView legacyCount = (TextView)navHeader.findViewById(R.id.legacy_count_text);
+
+                            photosCount.setText(str1);
+                            videoCount.setText(str2);
+                            placesVisitedCount.setText(str3);
+                            tranmissionCount.setText(str4);
+                            legacyCount.setText(str5);
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(MainActivity.this, ""+getResources().getString(R.string.data_not_available), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CountOfRecordsData> call, Throwable t) {
+                Toast.makeText(MainActivity.this, ""+getResources().getString(R.string.failed_to_connect_to_server), Toast.LENGTH_SHORT).show();
+                Log.i("Response_News_list_2","\t"+countOfRecordsDetails.size());
+            }
+        });
+
+    }
 }
+
+/*
+                     String gson = new Gson().toJson(response.body());
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(gson);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        JSONArray jsonArray = jsonObject.getJSONArray("message");
+                        for(int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String str1 = jsonObject1.getString("");
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+ */

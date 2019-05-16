@@ -12,7 +12,20 @@ public class FriendListResp {
     private String status;
     @SerializedName("message")
     @Expose
-    private List<Message> message = null;
+    private String message = null;
+
+
+    @SerializedName("result")
+    @Expose
+    private List<Message> result = null;
+
+    public List<Message> getResult() {
+        return result;
+    }
+
+    public void setResult(List<Message> result) {
+        this.result = result;
+    }
 
     public String getStatus() {
         return status;
@@ -22,11 +35,11 @@ public class FriendListResp {
         this.status = status;
     }
 
-    public List<Message> getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(List<Message> message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 

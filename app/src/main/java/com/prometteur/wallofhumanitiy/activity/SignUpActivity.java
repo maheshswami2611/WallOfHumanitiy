@@ -2,9 +2,9 @@ package com.prometteur.wallofhumanitiy.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,14 +16,12 @@ import com.prometteur.wallofhumanitiy.Interface.APIInterface;
 import com.prometteur.wallofhumanitiy.R;
 import com.prometteur.wallofhumanitiy.Utility.CommonMethods;
 import com.prometteur.wallofhumanitiy.helper.APIClient;
-import com.prometteur.wallofhumanitiy.other.LoginResponce;
 import com.prometteur.wallofhumanitiy.other.StatusResultResponce;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Field;
 
 public class SignUpActivity extends AppCompatActivity {
     private Button btnSignUpTabLogin, btnSignUp;
@@ -33,7 +31,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     CommonMethods commonMethods;
 Context context;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -89,7 +86,7 @@ Context context;
                     if (user_lname.length() > 0) {
                         if (commonMethods.isValidEmail(user_email)) {
                             if (commonMethods.isValidPassword(user_password)) {
-                                signupApi(user_fname, user_lname, user_dob, user_email, user_password);
+                                signupApi(user_fname, user_lname, user_email, user_password);
 
                             } else {
                                 edtSignUpPassword.setError("Enter valid Password");
@@ -112,33 +109,14 @@ Context context;
     }
 
 
-    private void signupApi(String user_fname, String user_lname, String user_dob, String user_email, String user_password) {
+    private void
+    signupApi(String user_fname, String user_lname, String user_email, String user_password) {
         spotsDialog.show();
         Call<StatusResultResponce> call = apiInterface.signup(
                 user_fname ,
                 user_lname ,
                 user_email ,
-                user_password ,
-                "",
-                "" ,
-                user_dob ,
-                "" ,
-                "" ,
-                "" ,
-                "",
-                "" ,
-                "",
-                "" ,
-                "" ,
-                "" ,
-                "" ,
-                "",
-                "" ,
-                "" ,
-                "" ,
-                "" ,
-                "" ,
-                ""
+                user_password
 
         );
         call.enqueue(new Callback<StatusResultResponce>() {
@@ -155,7 +133,7 @@ Context context;
                 if(null!=resource  && null!=resource.getStatus())
                 if(resource.getStatus().equalsIgnoreCase("1")){
                     Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(SignUpActivity.this,LoginActivity.class);
+                    Intent intent=new Intent(SignUpActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }else {

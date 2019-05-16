@@ -1,6 +1,8 @@
 package com.prometteur.wallofhumanitiy.Interface;
 
 
+import com.prometteur.wallofhumanitiy.Singleton.CountOfRecordsData;
+import com.prometteur.wallofhumanitiy.Singleton.NewsListData;
 import com.prometteur.wallofhumanitiy.other.ChangePasswordResp;
 import com.prometteur.wallofhumanitiy.other.EmailExistResp;
 import com.prometteur.wallofhumanitiy.other.FriendListResp;
@@ -42,32 +44,12 @@ public interface APIInterface {
 
 
     @FormUrlEncoded
-    @POST("madd/register")
+    @POST("mAdd/register")
     Call<StatusResultResponce> signup(
-            @Field(" user_fname ") String user_fname,
-            @Field(" user_lname ") String user_lname,
-            @Field(" user_email ") String user_email,
-            @Field(" user_password ") String user_password,
-            @Field(" user_username") String user_username,
-            @Field(" user_phone ") String user_phone,
-            @Field(" user_dob ") String user_dob,
-            @Field(" user_profile_img ") String user_profile_img,
-            @Field(" user_banner_img ") String user_banner_img,
-            @Field(" user_occupation ") String user_occupation,
-            @Field(" user_gender") String user_gender,
-            @Field(" user_aboutme ") String user_aboutme,
-            @Field(" user_location") String user_location,
-            @Field(" user_address ") String user_address,
-            @Field(" user_fcm_key ") String user_fcm_key,
-            @Field(" user_type ") String user_type,
-            @Field(" user_session ") String user_session,
-            @Field(" user_forget_status") String user_forget_status,
-            @Field(" user_forget_code ") String user_forget_code,
-            @Field(" user_create_date ") String user_create_date,
-            @Field(" user_create_by ") String user_create_by,
-            @Field(" user_update_date ") String user_update_date,
-            @Field(" user_update_by ") String user_update_by,
-            @Field(" user_status") String user_status
+            @Field("user_fname") String user_fname,
+            @Field("user_lname") String user_lname,
+            @Field("user_email") String user_email,
+            @Field("user_password") String user_password
     );
 
     @FormUrlEncoded
@@ -77,7 +59,7 @@ public interface APIInterface {
             @Field("user_fname") String user_fname,
             @Field("user_lname") String user_lname,
             @Field("user_phone") String user_phone,
-            @Field("user_password ") String user_password,
+            @Field("user_password") String user_password,
             @Field("user_dob") String user_dob,
             @Field("user_profile_img") String user_profile_img,
             @Field("user_banner_img") String user_banner_img,
@@ -124,6 +106,23 @@ public interface APIInterface {
 
     );
 
+    @FormUrlEncoded
+    @POST("fields/news")
+    Call<NewsListData> getNewsList(@Field("news_user_id") String news_user_id,
+                                   @Field("user_session") String user_session,
+                                   @Field("news_type") String news_type);
+
+    @FormUrlEncoded
+    @POST("mAdd/news")
+    Call<StatusResultResponce> getNewsCountStatus(@Field("news_likes_newsid") String news_likes_newsid,
+                                                  @Field("news_likes_by_userid") String news_likes_by_userid,
+                                                  @Field("user_session") String user_session);
+
+    @FormUrlEncoded
+    @POST("fields/record")
+    Call<CountOfRecordsData> getCountOfRecords(@Field("userid") String user_id, @Field("user_session") String user_session);
+
+
 
 
     @FormUrlEncoded
@@ -160,9 +159,5 @@ public interface APIInterface {
             @Field("store_userid") String store_userid,
             @Field("user_session") String user_session
     );
-
-
-
-
 
 }

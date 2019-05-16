@@ -2,7 +2,9 @@ package com.prometteur.wallofhumanitiy.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -41,6 +43,8 @@ public class SelectShareFriendsActivity extends AppCompatActivity {
     public List<FriendListResp.Message> friendList = new ArrayList<>();
     private RecyclerView recyclerView;
     private FriendsAdapter mAdapter;
+    String mainuser_id = "";
+    String mainuser_session="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +68,11 @@ public class SelectShareFriendsActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SelectShareFriendsActivity.this);
+        mainuser_id = preferences.getString("UserId", "");
+        mainuser_session= preferences.getString("UserSession", "");
 
-        getFriendList("117","577823567");
+        getFriendList(mainuser_id,mainuser_session);
 
 
         imgDone.setOnClickListener(new View.OnClickListener() {
@@ -78,10 +85,10 @@ public class SelectShareFriendsActivity extends AppCompatActivity {
                       }
                 }
 
-                shareMemory("117",
+                shareMemory(mainuser_id,
                         selectedFreidns.toString(),
                         "123",
-                        "577823567");
+                        mainuser_session);
 
             }
         });
@@ -102,7 +109,7 @@ public class SelectShareFriendsActivity extends AppCompatActivity {
 
 
                     if (resource.getStatus().toString().equals("1")) {
-                        friendList = resource.getMessage();
+                        friendList = resource.getResult();
 
                         for (int i=0;i<friendList.size();i++){
                             friendList.get(i).setSelected(false);
@@ -118,7 +125,7 @@ public class SelectShareFriendsActivity extends AppCompatActivity {
 
 
 
-                    } else if (resource.getStatus().toString().equals("2")) {
+                    } else  {
                         Toast.makeText(mContext, "" + resource.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     if (null != spotsDialog && spotsDialog.isShowing()) {

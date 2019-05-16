@@ -34,7 +34,7 @@ public class FragmentProfile extends Fragment {
     ImageView imgProfile,imgEditProfile;
     TextView tabAbout, tabPhotos, tabVideos, tabPlacesVisited, tabFriends, tabFollowers;
     private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
-    ArrayList<LoginResponce.Result> loginData;
+    ArrayList<LoginResponce.User> loginData;
     SpotsDialog spotsDialog;
     APIInterface apiInterface;
     TextView txtName,txtAboutMe, txtDOB, txtMobileNumber, txtGender, txtAddress, txtCity, txtCountry, txtPostCode;
@@ -46,7 +46,7 @@ public class FragmentProfile extends Fragment {
         imgProfile = view.findViewById(R.id.imgProfile);
 
 
-        loginData = (ArrayList<LoginResponce.Result>) getActivity().getIntent().getSerializableExtra("mylist");
+        loginData = (ArrayList<LoginResponce.User>) getActivity().getIntent().getSerializableExtra("mylist");
 
         txtName = view.findViewById(R.id.txtName);
         txtAboutMe = view.findViewById(R.id.txtAboutMe);
@@ -175,9 +175,9 @@ public class FragmentProfile extends Fragment {
                 LoginResponce resource = response.body();
 
                 if (null != resource && null != resource.getStatus())
-                    if (resource.getStatus() == 1) {
-                        if (null != response.body().getResult()) {
-                            loginData = response.body().getResult();
+                    if (resource.getStatus() .equalsIgnoreCase("1")) {
+                        if (null != response.body().getUser()) {
+                            loginData = response.body().getUser();
 
 
                             if (null != loginData) {
@@ -214,7 +214,12 @@ public class FragmentProfile extends Fragment {
                                         txtAboutMe.setText(user_aboutme);
                                         txtDOB.setText(user_dob);
                                         txtMobileNumber.setText(user_phone);
-                                        txtGender.setText(user_gender);
+                                        if(loginData.get(0).getUserGender().equalsIgnoreCase("0")){
+                                            txtGender.setText("Male");
+                                        }else if(loginData.get(0).getUserGender().equalsIgnoreCase("1")){
+                                            txtGender.setText("Female");
+
+                                        }
                                         txtAddress.setText(user_address);
             /*txtCity.setText(loginData.get(0).getUserLocation());
             txtCountry.setText(loginData.get(0).getUserLocation());

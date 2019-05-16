@@ -2,7 +2,9 @@ package com.prometteur.wallofhumanitiy.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +43,9 @@ public class FragmentBottomStore extends Fragment implements View.OnClickListene
     SpotsDialog spotsDialog;
     APIInterface apiInterface;
     Context mContext;
+    String mainuser_id = "";
+    String mainuser_session="";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,8 +57,12 @@ public class FragmentBottomStore extends Fragment implements View.OnClickListene
         spotsDialog = new SpotsDialog(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         rv_quick_purchase = (RecyclerView) view.findViewById(R.id.rv_quick_purchase);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mainuser_id = preferences.getString("UserId", "");
 
-        getStoreDataList("117","577823567");
+        mainuser_session = preferences.getString("UserSession", "");
+
+        getStoreDataList(mainuser_id,mainuser_session);
         return view;
     }
 
@@ -78,7 +87,7 @@ public class FragmentBottomStore extends Fragment implements View.OnClickListene
                     StoreResponce resource = response.body();
 
 
-                    if (resource.getStatus().toString().equals("1")) {
+                    if (resource.getStatus().equals("1")) {
                         gbPlanList = resource.getTotalPlansGb();
                         monthPlanList = resource.getTotalPlansMonth();
 

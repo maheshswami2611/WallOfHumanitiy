@@ -97,14 +97,25 @@
                             android:layout_gravity="center|end"
                             android:src="@drawable/react"/>
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.8"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/react_count_text"
                             android:text="React"
+                            android:textAlignment="center"
                             android:gravity="start|center"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                             android:textColor="@color/album_title"
                              />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/react_count"
+                            android:gravity="start|center"
+                            android:paddingHorizontal="10dp"
+                            android:textAlignment="textStart"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="@color/album_title"
+                            />
 
                         <TextView
                             android:id="@+id/txtReadNewsStory"
